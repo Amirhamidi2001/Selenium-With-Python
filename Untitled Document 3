@@ -1,0 +1,51 @@
+I have developed a simple Python code with Selenium Grid that performs the following operations:
+
+from selenium import webdriver
+
+try:
+    driver = webdriver.Remote(
+        command_executor='http://127.0.0.1:4444/wd/hub',
+        desired_capabilities={'browserName': 'firefox', 'javascriptEnabled': True}
+        )
+except Exception as e:
+    print("Error submitting form: ", e)
+
+driver.get('http://www.python.org')
+
+print("The test was done successfully")
+
+driver.quit()
+
+When I run the project it returns this error:
+
+DeprecationWarning: desired_capabilities has been deprecated, please pass in an Options object with options kwarg
+
+
+To fix the DeprecationWarning error, you can modify your code as follows:
+
+python
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+
+try:
+    options = Options()
+    options.add_argument('--headless')  # Run Firefox in headless mode
+    driver = webdriver.Remote(
+        command_executor='http://127.0.0.1:4444/wd/hub',
+        options=options,
+        desired_capabilities={'browserName': 'firefox'}
+    )
+except Exception as e:
+    print("Error submitting form: ", e)
+
+driver.get('http://www.python.org')
+
+print("The test was done successfully")
+
+driver.quit()
+
+
+In this modified code, we import Options from selenium.webdriver.firefox.options instead of using desired_capabilities. We also add the --headless argument to run Firefox in headless mode, which means it will run without opening a visible browser window.
+
+در این کد اصلاح شده، به جای استفاده از wish_capabilities، گزینه ها را از selenium.webdriver.firefox.options وارد می کنیم. ما همچنین آرگومان --headless را برای اجرای فایرفاکس در حالت headless اضافه می کنیم، به این معنی که بدون باز کردن پنجره قابل مشاهده مرورگر اجرا می شود.
+
